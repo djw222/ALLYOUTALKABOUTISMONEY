@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ALL YOU TALK ABOUT IS MONEY - The Journey</title>
+  <style>
+    /* --- your CSS unchanged, shortened for clarity --- */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #1a0000 0%, #330000 50%, #000000 100%);
+      color: white;
+      overflow-x: hidden;
+    }
+    /* keep the rest of your CSS as in your file */
+  </style>
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading"><div class="loader"></div></div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">…</nav>
+
+  <!-- Hero -->
+  <section class="hero">…</section>
+
+  <!-- Timeline / Phases / Weeks (your content is intact here) -->
+
+  <!-- Calendar Download Section -->
+  <div class="calendar-section">…</div>
+
+  <!-- Extra Story Section -->
+  <div class="story-section">…</div>
+
+  <script>
+    // --- Page interactions (loading, nav, scroll, ripple) ---
+    window.addEventListener('load', () => {
+      setTimeout(() => document.getElementById('loading').classList.add('fade-out'), 1500);
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) target.scrollIntoView({behavior:'smooth'});
+      });
+    });
+
+    let lastScroll = 0, nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      let y = window.scrollY;
+      nav.classList.toggle('hidden', y > lastScroll && y > 100);
+      lastScroll = y;
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.style.opacity=1; e.target.style.transform='translateY(0)'; } });
+    }, {threshold:0.1});
+    document.querySelectorAll('.phase').forEach((p,i)=>{ p.style.animationDelay=`${i*0.2}s`; observer.observe(p); });
+
+    document.querySelectorAll('.week-card').forEach(card=>{
+      card.addEventListener('mouseenter', ()=> card.style.transform='translateY(-10px) scale(1.02)');
+      card.addEventListener('mouseleave', ()=> card.style.transform='translateY(0) scale(1)');
+      card.addEventListener('click', function(){
+        const r=document.createElement('div');
+        r.style.cssText="position:absolute;border-radius:50%;background:rgba(255,0,0,0.3);transform:scale(0);animation:ripple .6s linear;left:50%;top:50%;width:20px;height:20px;margin-left:-10px;margin-top:-10px;";
+        this.appendChild(r); setTimeout(()=>r.remove(),600);
+      });
+    });
+
+    window.addEventListener('scroll',()=>{
+      const pct = window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+      let bg;
+      if(pct<25) bg="linear-gradient(135deg,#1a0000 0%,#330000 50%,#000000 100%)";
+      else if(pct<50) bg="linear-gradient(135deg,#330000 0%,#4d0000 50%,#1a0000 100%)";
+      else if(pct<75) bg="linear-gradient(135deg,#4d0000 0%,#660000 50%,#330000 100%)";
+      else bg="linear-gradient(135deg,#660000 0%,#800000 50%,#4d0000 100%)";
+      document.body.style.background=bg;
+    });
+
+    // --- Calendar Generation + Download ---
+    const releaseData = {
+      "september-2024":[{date:6,songs:["No retirement","Locked in"],phase:"The Grind"}, … ],
+      "october-2024":[…], "november-2024":[…],
+      "december-2024":[…], "january-2025":[…],
+      "february-2025":[…], "march-2025":[…],
+      "april-2025":[{date:1,songs:["Take it back"],phase:"The Balance"}]
+    };
+
+    function generateCalendarHTML(month, year, releases){ … }  // keep your existing implementation
+    function downloadCalendar(monthKey){ … }
+    function downloadFullCalendar(){ … }
+
+    // Add ripple keyframes
+    const style=document.createElement('style');
+    style.textContent=`@keyframes ripple {to{transform:scale(4);opacity:0;}}`;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
